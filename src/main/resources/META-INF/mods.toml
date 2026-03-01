@@ -1,0 +1,25 @@
+# See https://docs.minecraftforge.net/en/1.21.x/gettingstarted/modfiles/#modstoml
+modLoader="javafml"
+loaderVersion="[61,)"
+license="MIT"
+
+[[mods]]
+modId="copper_beacon"
+version="1.0.0"
+displayName="Copper Beacon"
+authors="MemaroX"
+description='''Allows copper blocks to be used as a beacon base.'''
+
+[[dependencies.copper_beacon]]
+    modId="forge"
+    mandatory=true
+    versionRange="[61,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.copper_beacon]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.21.11,1.22,)"
+    ordering="NONE"
+    side="BOTH"

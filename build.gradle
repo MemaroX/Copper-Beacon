@@ -1,0 +1,76 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'eclipse'
+    id 'net.minecraftforge.gradle' version '7.0.7'
+}
+
+version = '1.0.0'
+group = 'me.memarox.copperbeacon'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+// Include generated resources
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+minecraft {
+    mappings channel: 'official', version: '1.21.11'
+
+    runs {
+        configureEach {
+            workingDir = project.file('run')
+
+            // Pass comprehensive arguments for FML 61.x
+            args.add('--launchTarget')
+            args.add('forge_userdev_client')
+            args.add('--version')
+            args.add('MOD_DEV')
+            args.add('--assetIndex')
+            args.add('{asset_index}')
+            args.add('--assetsDir')
+            args.add('{assets_root}')
+            args.add('--gameDir')
+            args.add('.')
+
+            systemProperty 'forge.logging.markers', 'registries'
+            systemProperty 'forge.logging.console.level', 'debug'
+            systemProperty 'forge.enabledGameTestNamespaces', 'copper_beacon'
+        }
+
+        client {
+            // Inherits from configureEach
+        }
+
+        server {
+            // Override for server
+            args.set(['--launchTarget', 'forge_userdev_server', '--gameDir', '.', '--nogui'])
+        }
+
+        data {
+            workingDir = project.file('run-data')
+            // Override for data
+            args.set(['--launchTarget', 'forge_userdev_data', '--mod', 'copper_beacon', '--all', '--output', file('src/generated/resources/').absolutePath, '--existing', file('src/main/resources/').absolutePath, '--assetIndex', '{asset_index}', '--assetsDir', '{assets_root}', '--gameDir', '.'])
+        }
+    }
+}
+
+repositories {
+    minecraft.mavenizer(it)
+    maven fg.forgeMaven
+    maven fg.minecraftLibsMaven
+    mavenCentral()
+}
+
+dependencies {
+    implementation minecraft.dependency('net.minecraftforge:forge:1.21.11-61.1.0')
+    implementation 'net.minecraftforge:eventbus:7.0.1'
+    annotationProcessor 'net.minecraftforge:eventbus-validator:7.0.1'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
